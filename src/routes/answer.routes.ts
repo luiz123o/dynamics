@@ -3,6 +3,7 @@ import { parseISO } from 'date-fns';
 
 import AnswerRepository from 'repositories/AnswerRepository';
 import CreateAnswerService from 'services/CreateAnswerService';
+import ensureAuthenticated from '@shared/infra/http/middleware/ensureAuth';
 
 const answerRouter = Router();
 const answerRepository = new AnswerRepository();
@@ -10,11 +11,13 @@ const answerRepository = new AnswerRepository();
  * verificar se existe uma question com a id
  * usuario deve estar logado
  */
+answerRouter.use(ensureAuthenticated)
 
 answerRouter.post('/', async (request, response) => {
   try {
-    const { description, date, questionId, userId, location } = request.body;
+    const { description, date, questionId, location } = request.body;
     const parsedDate = parseISO(date);
+    const userId = request.user.id;
 
     const createAnswer = new CreateAnswerService(answerRepository);
 

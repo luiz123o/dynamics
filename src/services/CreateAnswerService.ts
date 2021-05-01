@@ -1,6 +1,7 @@
 import { getConnection } from '@config/database';
 import AnswerRepository from '../repositories/AnswerRepository';
 import Answers from 'models/Answer';
+
 type Location = {
   long: string;
 
@@ -17,33 +18,36 @@ interface RequestDTO {
 
 class CreateAnswerService {
   private answersRepository: AnswerRepository;
+
   constructor(answersRepository: AnswerRepository) {
     this.answersRepository = answersRepository;
+
   }
 
-  public execute({
+  public  execute({
     description,
     location,
     date,
     questionId,
     userId,
   }: RequestDTO): Answers | undefined {
-    const findQuestion = getConnection().get('questionary').find().value();
+    const findData =  getConnection().get('questionary').value()
+    const findUser = getConnection().get('users').find({id: userId}).value();
 
-    const questionExists: any = findQuestion.find(
-      (data: { questionData: any[] }) =>
-        data.questionData.find(question => question.id === questionId),
-    );
-    console.log(questionExists);
+    const data = findData.map((d: { questionData: any; }) => d.questionData)
+    const idsExists = data.find((i: any[]) => i.find((a: { id: string; }) => a.id))
+    const idsTratment = idsExists.find((i: { id: string; }) => i.id = questionId)
 
-    if (questionExists) {
+
+
+    if (findUser && idsTratment) {
       const answer = this.answersRepository.create({
         description,
         location,
         questionId,
         date,
         userId,
-      });
+      })
 
       return answer;
     }
