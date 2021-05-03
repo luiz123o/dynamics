@@ -35,12 +35,12 @@ class CreateAnswerService {
     const findUser = getConnection().get('users').find({id: userId}).value();
 
     const data = findData.map((d: { questionData: any; }) => d.questionData)
-    const idsExists = data.find((i: any[]) => i.find((a: { id: string; }) => a.id))
-    const idsTratment = idsExists.find((i: { id: string; }) => i.id = questionId)
+    const treatedId = data.find((i: any[]) => i.find((a: { id: string; }) => a.id))
+    const idExists = treatedId.find((i: { id: string; }) => i.id = questionId)
 
 
 
-    if (findUser && idsTratment) {
+    if (findUser && idExists) {
       const answer = this.answersRepository.create({
         description,
         location,
