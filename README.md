@@ -9,6 +9,8 @@ Instalar as dependências do projeto:
 ```
 yarn
 ```
+## Adicione a variavel do token
+em .envExample e depois renomeie somente para .env
 ## Rode o projeto
 Utilize o comando:
 ```
